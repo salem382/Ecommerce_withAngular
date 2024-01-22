@@ -1,0 +1,31 @@
+<div class="container">
+  <form (ngSubmit)="uploadImg()" class="form">
+    <div class="row">
+      <div class="col-10">
+        <input type="file" (change)="imgFile($event)" class="form-control w-100">
+      </div>
+      <div class="col-2">
+        <button type="submit" class="btn btn-primary w-100">Add New Photo</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<p *ngIf="message" class="h4 text-center mt-5">{{message}}</p>
+<table class="w-100 mt-4 table table-bordered table-hover table-striped text-center" *ngIf="showTable">
+  <thead>
+    <tr style="text-transform:capitalize;color: #1f8291d4; " class="bg-white">
+      <th>No</th>
+      <th>Image</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let photo of photos; index as i">
+      <td>{{i+1}}</td>
+      <td><img [src]="'http://localhost:8000/storage/images/products/'+photo.path" width="100"></td>
+      <td><button class="btn btn-danger m-2" (click)="deleteGallery(photo.id)"><i class="fa fa-trash"></i></button></td>
+
+    </tr>
+  </tbody>
+</table>

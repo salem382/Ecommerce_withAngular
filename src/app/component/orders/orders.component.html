@@ -1,0 +1,127 @@
+<div class="row pt-3 ">
+  <div class="col-12">
+    <h5>My Orders</h5>
+    <hr>
+  </div>
+</div>
+<ng-container *ngFor="let order of orders;index as z">
+  <div *ngIf="ordersTotal[1][z].status=='processing'||ordersTotal[1][z].status=='ondelivery'||ordersTotal[1][z].status=='pending'" class="card w-100 mt-3 p-3">
+    <div class="card-body" *ngFor="let item of order ; index as i">
+      <div class="row" *ngIf="i==0">
+        <div class="row">
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <h3 class="card-title font-weight-bold"> Order ID : {{item.id}}</h3>
+                <!-- <button (click)="goToTrackOrder(item.id, ordersTotal[1][z].status)">Track Order</button> -->
+              </div>
+            </div>
+            <div class="row ">
+              <div class="col">
+                <span class="small font-weight-bold" style="color:gray" *ngIf="i==0">
+                  order date : {{item.created_at|date:'shortDate'}} </span>
+              </div>
+
+            </div>
+          </div>
+          <div class="col ">
+            <div class="row float-end">
+              <h3>
+                <button (click)="goToTrackOrder(item.id, ordersTotal[1][z].status)" class="font-weight-bold h5 badge" [ngClass]="{'bg-primary': ordersTotal[1][z].status ===
+                  'processing',
+                  'bg-warning': ordersTotal[1][z].status === 'pending',
+                  'bg-success': ordersTotal[1][z].status === 'ondelivery' }">
+                  <span *ngIf="ordersTotal[1][z].status=='pending'">Pending</span>
+                  <span *ngIf="ordersTotal[1][z].status=='ondelivery'">On Delivery</span>
+                  <span *ngIf="ordersTotal[1][z].status=='processing'">Processing</span>
+                </button>
+              </h3>
+            </div>
+            <div class="row small " style="color:gray">
+              <br>
+
+            </div>
+            <!-- <div class="row float-end small " style="color:gray">
+              <div *ngIf="(ordersTotal[1][z].status=='Processing' ||
+                ordersTotal[1][z].status=='On Delivery')"
+                class="ml-5">
+
+                Delivery Date: {{ordersTotal[1][z].time}} Days from ordering date
+              </div>
+            </div> -->
+          </div>
+        </div>
+
+
+
+      </div>
+      <br>
+      <div class="row mt-2">
+        <div class="col-4">
+          <img [src]="'http://localhost:8000/storage/images/products/'+item.photo" width="100" class="w-100q
+            p-1" alt="...">
+        </div>
+
+        <div class="col-4">
+          <div class="row h6"> {{item.name}}</div>
+          <div class="row small" style="color:gray">{{item.description}}</div>
+        </div>
+        <div class="col-4 float-end">
+          <div class="row h5 mr-5 float-end">
+
+            EGP {{item.total_price}}
+
+          </div>
+          <div class="row small mr-5" style="color:gray">
+            <pre>
+
+          </pre>
+          </div>
+          <div class="row small mr-5 float-end" style="color:gray">
+
+            Qnt : {{item.product_qnt}}
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row mb-2">
+      <div class="col-12 px-5">
+        <div class="h5 font-weight-bold">Delivery</div>
+        <div class="small " style="color:gray">Address</div>
+        <div class=" ">
+          <span>{{addressData.street}}, {{addressData.city}}, {{addressData.governorate}}</span>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row px-5">
+
+      <div class=" h5 font-weight-bold">Order Summary</div>
+      <div class="row">
+        <div class="col-6">Subtotal</div>
+        <div class="col-6"> EGP {{ordersTotal[0][z]-ordersTotal[1][z].price}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-6 fs-6">Delivery</div>
+        <div class="col-6" style="color:rgb(6, 15, 134);">+EGP {{ordersTotal[1][z].price}} </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row mb-3 px-5">
+      <div class="col-6 h5 font-weight-bold text-success">Total</div>
+      <div class="col-6 font-weight-bold text-success">EGP {{
+        ordersTotal[0][z]}} </div>
+
+    </div>
+
+  </div>
+</ng-container>

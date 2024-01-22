@@ -1,0 +1,148 @@
+<section class="gradient-custom">
+
+  <div *ngIf="isfull==1" class="container">
+    <div class="row d-flex justify-content-center my-4">
+      <div class="col-md-8">
+        <div class="card mb-4">
+          <div class="card-header py-3">
+            <h5 class="mb-0">Cart - ({{ products.length }}) items</h5>
+          </div>
+          <div class="card-body">
+
+            <div *ngFor="let pro of products; index as n" class="card border-0 px-3">
+              <div class="row">
+                <div class="col-3 px-3">
+                  <img [src]="'http://localhost:8000/storage/images/products/'+pro.photo" style="aspect-ratio: 1;  object-fit: contain;" width="100" alt="">
+                </div>
+                <div class="col-6">
+                  <h5 class="mt-0">{{pro.name}}</h5>
+                  <p class="m-0">{{pro.description}}</p>
+                </div>
+                <div class="col-3 py-auto">
+                  <h5 class="mt-0 my-auto me-2 text-end">EGP {{pro.price}}</h5>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6 col-lg-9 mt-2">
+                  <a (click)="deleteCart(pro.id)" class="mx-3" style="color: darkcyan;"><i
+                      class="fa-solid fa-trash"></i> REMOVE</a>
+                </div>
+                <div class="col-6 col-lg-3 px-3">
+                  <div class="input-group">
+                    <button (click)="decrementPrd(pro.prd_id)" class="btn btn-success"
+                      style="background-color: darkcyan;" type="button"><i class="fa-solid fa-minus"></i></button>
+                    <input type="text" readonly value="{{pro.quantity}}" class="form-control text-center" placeholder=""
+                      aria-label="Example text with two button addons">
+                    <button (click)="incrementPrd(pro.prd_id)" class="btn btn-success"
+                      style="background-color: darkcyan;" type="button"><i class="fa-solid fa-plus"></i></button>
+                  </div>
+                </div>
+              </div>
+              <hr *ngIf="products.length-1 > n">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-header py-3">
+            <h5 class="mb-0">Summary</h5>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between px-2 my-2">
+              <h4>Total</h4>
+              <h4>EGP {{totalPrice}}</h4>
+            </div>
+            <button type="button" class="btn but btn-lg btn-block btn-outline-primary" [routerLink]="['check']">
+              Go To Checkout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isfull==-1" class="row my-5">
+    <div class="d-flex justify-content-center">
+      <img src="../../../assets/empty.png" width="150" alt="">
+    </div>
+    <h5 class="text-center mt-2 mb-4">There are no products found in cart...</h5>
+    <div class="d-flex justify-content-center">
+      <a [routerLink]="['/main/home']" class="btn btn-primary mt-3 px-3" style="background-color: darkcyan;">Go
+        Back To Home
+      </a>
+    </div>
+  </div>
+
+</section>
+
+
+<div class="container mt-0 mb-5 p-0 px-4">
+  <!-- top products selling list -->
+  <div *ngIf="topSellingProducts.length>5" class="row mt-4">
+    <div class="card p-0 ">
+      <div class="card-header list-group-item-warning text-dark d-flex justify-content-between">
+        <h5 class="text-center mt-1">Top Selling</h5>
+        <a (click)="goToPrdList('topSelling','1')" class="p-1">SEE MORE</a>
+      </div>
+      <div class="row  px-3 pb-4">
+        <div *ngFor="let i of topSelling" class="col-lg-2 col-6 px-0 mt-2">
+          <a (click)="goToPrdDetails(i.id)" class="text-muted text-decoration-none">
+            <div class="card shadow m-2 bg-body rounded h-100 p-1">
+              <div style="height: 170px;">
+                <img [src]="'http://localhost:8000/storage/images/products/'+i.photo" style="aspect-ratio: 1;  object-fit: contain;" class="card-img-top p-3 h-100"  alt="...">
+                </div>
+              <hr class="m-0 mb-2">
+              <p class="card-title mx-2 text-decoration-none text-dark">{{i.name}}</p>
+              <div *ngIf="i.prd_rating>0" class="ratings d-flex flex-row align-items-center px-2 mb-1">
+                <div class="d-flex flex-row" style="font-size: 12px;color: rgb(216, 178, 11);">
+                  <ng-container *ngFor="let index of [1,2,3,4,5],index as n">
+                    <i *ngIf="i.prd_rating>n" class="fa-solid fa-star"></i>
+                    <i *ngIf="i.prd_rating<=n" class="fa-regular fa-star"></i>
+                  </ng-container>
+                </div>
+              </div>
+              <h6 class="mx-2 mb-0 text-dark text-decoration-none">EGP {{i.price}}</h6>
+              <p *ngIf="i.price_before_discount>0" class="mx-2 mb-0 text-muted text-decoration-line-through">EGP
+                {{i.price_before_discount}}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- top products rating list -->
+  <div *ngIf="topRatingProducts.length>5" class="row mt-4">
+    <div class="card p-0 ">
+      <div class="card-header list-group-item-warning text-dark d-flex justify-content-between">
+        <h5 class="text-center mt-1">Top Rating</h5>
+        <a (click)="goToPrdList('topRating','1')" class="p-1">SEE MORE</a>
+      </div>
+      <div class="row  px-3 pb-4">
+        <div *ngFor="let i of topRating" class="col-lg-2 col-6 px-0 mt-2">
+          <a (click)="goToPrdDetails(i.id)" class="text-muted text-decoration-none">
+            <div class="card shadow m-2 bg-body rounded h-100 p-1">
+              <div style="height: 170px;">
+                <img [src]="'http://localhost:8000/storage/images/products/'+i.photo" style="aspect-ratio: 1;  object-fit: contain;" class="card-img-top p-3 h-100"  alt="...">
+                </div>
+              <hr class="m-0 mb-2">
+              <p class="card-title mx-2 text-decoration-none text-dark">{{i.name}}</p>
+              <div *ngIf="i.prd_rating>0" class="ratings d-flex flex-row align-items-center px-2 mb-1">
+                <div class="d-flex flex-row" style="font-size: 12px;color: rgb(216, 178, 11);">
+                  <ng-container *ngFor="let index of [1,2,3,4,5],index as n">
+                    <i *ngIf="i.prd_rating>n" class="fa-solid fa-star"></i>
+                    <i *ngIf="i.prd_rating<=n" class="fa-regular fa-star"></i>
+                  </ng-container>
+                </div>
+              </div>
+              <h6 class="mx-2 mb-0 text-dark text-decoration-none">EGP {{i.price}}</h6>
+              <p *ngIf="i.price_before_discount>0" class="mx-2 mb-0 text-muted text-decoration-line-through">EGP
+                {{i.price_before_discount}}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

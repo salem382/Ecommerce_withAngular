@@ -1,0 +1,38 @@
+<h5 class="my-3 ">Account Overview</h5>
+<hr style="color:gray">
+<div class="row p-2">
+  <div class="col-12  col-lg-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6>ACCOUNT DETAILS</h6>
+        <hr style="color:gray">
+        <p>Name: {{ user.first_name }} {{user.last_name }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Phone: {{ user.phone }}</p>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+    <div class="card h-100">
+      <div *ngIf="show" class="card-body">
+        <h6>ADDRESS DETAILS</h6>
+        <hr style="color:gray">
+        <p class="mb-1"> Street : {{Addressres.street}}</p>
+        <p class="mb-1">City : {{Addressres.city}}</p>
+        <p class="mb-1">Governorate : {{Addressres.governorate}}</p>
+        <p>Zip Code : {{Addressres.zip_code}}</p>
+        <a routerLink="/main/profile/updateaddress" routerLinkActive="active">CHANGE DEFAULT ADDRESS</a>
+      </div>
+      <div *ngIf="hide" class="card-body">
+        <h6>ADDRESS DETAILS</h6>
+        <hr style="color:gray">
+        <p>No default address found.</p>
+        <br>
+        <button routerLink="/main/profile/address" routerLinkActive="active" class="btn btn-success bg-c1">ADD DEFAULT ADDRESS</button>
+      </div>
+    </div>
+  </div>
+
+</div>

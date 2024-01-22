@@ -1,0 +1,143 @@
+<div class="container mt-4 mb-4 px-3">
+  <div class="card">
+    <div class="row g-0">
+      <div class="col-md-6 border-end">
+        <div class="d-flex flex-column justify-content-center">
+          <div class="main_image">
+            <!-- <p *ngFor="let i of prd">{{}}</p> -->
+            <img *ngFor="let i of prd" [src]="'http://localhost:8000/storage/images/products/'+photo" id="main_product_image"  height="300" />
+          </div>
+          <div class="thumbnail_images">
+            <ul class="px-0" id="thumbnail">
+              <li>
+                <img *ngFor="let i of prd" (click)="changeImage(i.photo)" [src]="'http://localhost:8000/storage/images/products/'+i.photo" height="70" />
+              </li>
+              <li *ngFor="let i of prdPhoto">
+                <img (click)="changeImage(i.path)" [src]="'http://localhost:8000/storage/images/products/'+i.path" height="70" />
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- <pre>{{ prd | json }}</pre> -->
+      <div class="col-md-6">
+        <div *ngFor="let i of prd" class="p-5 right-side">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="mt-1 mt-lg-4">{{prd[0].name}}</h3>
+          </div>
+          <div class="mt-2 pr-3 content">
+            <p>{{prd[0].description}}</p>
+          </div>
+          <h3>EGP {{prd[0].price}}</h3>
+          <p *ngIf="prd[0].price_before_discount>0" class="text-muted text-decoration-line-through">EGP
+            {{prd[0].price_before_discount}}</p>
+          <div class="ratings d-flex flex-row align-items-center">
+            <div class="d-flex flex-row">
+              <ng-container *ngFor="let index of [1,2,3,4,5],index as n">
+                <i *ngIf="prd[0].prd_rating>n" class="fa-solid fa-star"></i>
+                <i *ngIf="prd[0].prd_rating<=n" class="fa-regular fa-star"></i>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <p *ngIf="x" class="text-danger">This product has already been added to the cart</p>
+            <p *ngIf="y" class="text-danger">Product out of stock</p>
+          </div>
+
+          <div class="buttons d-flex flex-row mt-2 gap-3">
+            <button *ngIf="addBtn && !y" (click)="addPrdToCart()" class="btn btn-primary bg px-4">Add To Cart</button>
+            <button *ngIf="!addBtn || y" (click)="addPrdToCart()" class="btn btn-primary bg px-4 disabled">Add To Cart</button>
+            <button [routerLink]="['/main/home']" class="btn btn-secondary text-white px-4">Go To Homepage</button>
+            <button *ngIf="!isFav" (click)="addPrdToFav()" class="btn text-danger fs-3 m-0 p-0"><i class="fa-regular fa-heart"></i></button>
+            <button *ngIf="isFav" (click)="addPrdToFav()" class="btn text-danger fs-3 m-0 p-0"><i class="fa-solid fa-heart"></i></button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container mt-0 mb-5 p-0 px-4">
+  <div *ngIf="topSellingProducts.length>5" class="row mt-4">
+    <div class="card p-0 ">
+      <div class="card-header list-group-item-warning text-dark d-flex justify-content-between">
+        <h5 class="text-center mt-1">Similar Products</h5>
+        <a (click)="goToPrdList('topSelling','1')" class="p-1">SEE MORE</a>
+      </div>
+      <div class="row  px-3 pb-4">
+        <div *ngFor="let i of topSelling" class="col-lg-2 col-6 px-0 mt-2">
+          <a [href]="'main/product/'+i.id" class="text-muted text-decoration-none">
+            <div class="card shadow m-2 bg-body rounded h-100 p-1">
+              <div style="height: 170px;">
+                <img [src]="'http://localhost:8000/storage/images/products/'+i.photo" style="aspect-ratio: 1;  object-fit: contain;" class="card-img-top p-3 h-100"  alt="...">
+                </div>
+              <hr class="m-0 mb-2">
+              <p class="card-title mx-2 text-decoration-none text-dark">{{i.name}}</p>
+              <div *ngIf="i.prd_rating>0" class="ratings d-flex flex-row align-items-center px-2 mb-1">
+                <div class="d-flex flex-row" style="font-size: 12px;color: rgb(216, 178, 11);">
+                  <ng-container *ngFor="let index of [1,2,3,4,5],index as n">
+                    <i *ngIf="i.prd_rating>n" class="fa-solid fa-star"></i>
+                    <i *ngIf="i.prd_rating<=n" class="fa-regular fa-star"></i>
+                  </ng-container>
+                </div>
+              </div>
+              <h6 class="mx-2 mb-0 text-dark text-decoration-none">EGP {{i.price}}</h6>
+              <p *ngIf="i.price_before_discount>0" class="mx-2 mb-0 text-muted text-decoration-line-through">EGP
+                {{i.price_before_discount}}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<section>
+  <div class="container my-lg-5 py-4 text-dark">
+    <div class="row">
+      <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="text-dark mb-0">Comments ({{prdRating.length}})</h4>
+          <div class="card">
+          </div>
+        </div>
+
+        <div *ngFor="let i of prdRating" class="card mb-3">
+          <div class="card-body">
+            <div class="d-flex flex-start">
+              <div class="w-100">
+                <h4>{{i.review}}</h4>
+                <p>{{i.created_at | date}}</p>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="d-flex flex-row">
+                    <ng-container *ngFor="let index of [1,2,3,4,5],index as n">
+                      <i *ngIf="i.star>n" class="fa-solid fa-star"></i>
+                      <i *ngIf="i.star<=n" class="fa-regular fa-star"></i>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  
+
+
+</section>
+
+
+
+<script>
+  function changeImage(element) {
+    var main_prodcut_image = document.getElementById('main_product_image');
+    main_prodcut_image.src = element.src;
+  }
+
+</script>
